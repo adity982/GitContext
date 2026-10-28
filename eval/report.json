@@ -1,0 +1,1023 @@
+{
+  "summary": {
+    "repo": "psf/requests",
+    "indexed_commit": "3c7baaa05ab4aa49cc819ce3a819d260de19c157",
+    "questions": 25,
+    "recall_at_5": 0.84,
+    "median_retrieval_ms": 174.3,
+    "p95_retrieval_ms": 655.1,
+    "by_type": {
+      "code": {
+        "n": 20,
+        "recall_at_5": 0.8
+      },
+      "history": {
+        "n": 5,
+        "recall_at_5": 1.0
+      }
+    },
+    "scope": "source-location retrieval only; answer correctness and citation support require human review"
+  },
+  "details": [
+    {
+      "id": "Q01",
+      "question": "When does Requests remove Authorization while following a redirect?",
+      "type": "code",
+      "hit_at_5": true,
+      "first_hit_rank": 1,
+      "retrieval_ms": 185.7,
+      "returned": [
+        {
+          "kind": "code",
+          "path": "src/requests/sessions.py",
+          "symbol": "SessionRedirectMixin.should_strip_auth",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/sessions.py#L154-L184"
+        },
+        {
+          "kind": "code",
+          "path": "src/requests/sessions.py",
+          "symbol": "SessionRedirectMixin.rebuild_auth",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/sessions.py#L309-L332"
+        },
+        {
+          "kind": "code",
+          "path": "src/requests/sessions.py",
+          "symbol": "SessionRedirectMixin.rebuild_proxies",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/sessions.py#L334-L368"
+        },
+        {
+          "kind": "code",
+          "path": "tests/test_requests.py",
+          "symbol": "TestRequests.test_auth_is_retained_for_redirect_on_host",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/tests/test_requests.py#L1933-L1938"
+        },
+        {
+          "kind": "code",
+          "path": "tests/test_requests.py",
+          "symbol": "TestRequests.test_custom_redirect_mixin",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/tests/test_requests.py#L2286-L2328"
+        }
+      ]
+    },
+    {
+      "id": "Q02",
+      "question": "Where are environment proxy and certificate settings combined with explicit request settings?",
+      "type": "code",
+      "hit_at_5": true,
+      "first_hit_rank": 1,
+      "retrieval_ms": 128.4,
+      "returned": [
+        {
+          "kind": "code",
+          "path": "src/requests/sessions.py",
+          "symbol": "Session.merge_environment_settings",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/sessions.py#L831-L868"
+        },
+        {
+          "kind": "code",
+          "path": "src/requests/sessions.py",
+          "symbol": "Session.prepare_request",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/sessions.py#L511-L555"
+        },
+        {
+          "kind": "code",
+          "path": "src/requests/adapters.py",
+          "symbol": "HTTPAdapter.get_connection_with_tls_context",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/adapters.py#L455-L510"
+        },
+        {
+          "kind": "code",
+          "path": "tests/test_requests.py",
+          "symbol": "TestRequests.test_http_with_certificate",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/tests/test_requests.py#L1026-L1028"
+        },
+        {
+          "kind": "code",
+          "path": "src/requests/adapters.py",
+          "symbol": "HTTPAdapter.proxy_headers",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/adapters.py#L613-L632"
+        }
+      ]
+    },
+    {
+      "id": "Q03",
+      "question": "How does a Session prepare a Request with cookies and authentication?",
+      "type": "code",
+      "hit_at_5": true,
+      "first_hit_rank": 1,
+      "retrieval_ms": 118.6,
+      "returned": [
+        {
+          "kind": "code",
+          "path": "src/requests/sessions.py",
+          "symbol": "Session.prepare_request",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/sessions.py#L511-L555"
+        },
+        {
+          "kind": "code",
+          "path": "src/requests/models.py",
+          "symbol": "PreparedRequest.prepare_cookies",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/models.py#L699-L720"
+        },
+        {
+          "kind": "code",
+          "path": "src/requests/sessions.py",
+          "symbol": "Session.request",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/sessions.py#L557-L653"
+        },
+        {
+          "kind": "code",
+          "path": "src/requests/models.py",
+          "symbol": "PreparedRequest.prepare",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/models.py#L424-L451"
+        },
+        {
+          "kind": "code",
+          "path": "src/requests/cookies.py",
+          "symbol": "RequestsCookieJar",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/cookies.py#L191-L202"
+        }
+      ]
+    },
+    {
+      "id": "Q04",
+      "question": "Which method splits a streaming response into lines?",
+      "type": "code",
+      "hit_at_5": true,
+      "first_hit_rank": 1,
+      "retrieval_ms": 80.8,
+      "returned": [
+        {
+          "kind": "code",
+          "path": "src/requests/models.py",
+          "symbol": "Response.iter_lines",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/models.py#L994-L1032"
+        },
+        {
+          "kind": "code",
+          "path": "src/requests/models.py",
+          "symbol": "Response.iter_lines",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/models.py#L986-L993"
+        },
+        {
+          "kind": "code",
+          "path": "src/requests/models.py",
+          "symbol": "Response.iter_lines",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/models.py#L979-L985"
+        },
+        {
+          "kind": "code",
+          "path": "src/requests/models.py",
+          "symbol": "Response.iter_content",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/models.py#L914-L977"
+        },
+        {
+          "kind": "code",
+          "path": "src/requests/models.py",
+          "symbol": "Response",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/models.py#L732-L743"
+        }
+      ]
+    },
+    {
+      "id": "Q05",
+      "question": "How does Response parse JSON and handle decoding errors?",
+      "type": "code",
+      "hit_at_5": true,
+      "first_hit_rank": 1,
+      "retrieval_ms": 75.0,
+      "returned": [
+        {
+          "kind": "code",
+          "path": "src/requests/models.py",
+          "symbol": "Response.json",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/models.py#L1091-L1124"
+        },
+        {
+          "kind": "code",
+          "path": "src/requests/auth.py",
+          "symbol": "HTTPDigestAuth.handle_401",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/auth.py#L273-L319"
+        },
+        {
+          "kind": "code",
+          "path": "src/requests/models.py",
+          "symbol": "Response.__init__",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/models.py#L765-L810"
+        },
+        {
+          "kind": "code",
+          "path": "src/requests/exceptions.py",
+          "symbol": "ContentDecodingError",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/exceptions.py#L134-L135"
+        },
+        {
+          "kind": "code",
+          "path": "src/requests/utils.py",
+          "symbol": "stream_decode_response_unicode",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/utils.py#L594-L610"
+        }
+      ]
+    },
+    {
+      "id": "Q06",
+      "question": "Where is Content-Length determined for a prepared request body?",
+      "type": "code",
+      "hit_at_5": true,
+      "first_hit_rank": 1,
+      "retrieval_ms": 81.3,
+      "returned": [
+        {
+          "kind": "code",
+          "path": "src/requests/models.py",
+          "symbol": "PreparedRequest.prepare_content_length",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/models.py#L654-L668"
+        },
+        {
+          "kind": "code",
+          "path": "src/requests/models.py",
+          "symbol": "PreparedRequest.prepare_body",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/models.py#L576-L652"
+        },
+        {
+          "kind": "code",
+          "path": "tests/test_requests.py",
+          "symbol": "TestRequests.test_no_body_content_length",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/tests/test_requests.py#L129-L132"
+        },
+        {
+          "kind": "code",
+          "path": "tests/test_requests.py",
+          "symbol": "TestRequests.test_chunked_upload_does_not_set_content_length_header",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/tests/test_requests.py#L2275-L2284"
+        },
+        {
+          "kind": "code",
+          "path": "tests/test_requests.py",
+          "symbol": "TestRequests.test_empty_stream_with_auth_does_not_set_content_length_header",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/tests/test_requests.py#L2251-L2261"
+        }
+      ]
+    },
+    {
+      "id": "Q07",
+      "question": "Which function constructs multipart upload fields from files?",
+      "type": "code",
+      "hit_at_5": true,
+      "first_hit_rank": 1,
+      "retrieval_ms": 83.9,
+      "returned": [
+        {
+          "kind": "code",
+          "path": "src/requests/models.py",
+          "symbol": "RequestEncodingMixin._encode_files",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/models.py#L182-L251"
+        },
+        {
+          "kind": "code",
+          "path": "src/requests/models.py",
+          "symbol": "Request",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/models.py#L284-L295"
+        },
+        {
+          "kind": "code",
+          "path": "src/requests/api.py",
+          "symbol": "request",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/api.py#L24-L71"
+        },
+        {
+          "kind": "pr",
+          "path": "PR#7502",
+          "symbol": "Fix `_encode_files` detection for `__getattr__`-based file wrappers",
+          "url": "https://github.com/psf/requests/pull/7502"
+        },
+        {
+          "kind": "module",
+          "path": "src/requests/models.py",
+          "symbol": "models",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/models.py#L1-L60"
+        }
+      ]
+    },
+    {
+      "id": "Q08",
+      "question": "Where does the HTTP adapter verify the TLS certificate and CA bundle?",
+      "type": "code",
+      "hit_at_5": true,
+      "first_hit_rank": 1,
+      "retrieval_ms": 98.0,
+      "returned": [
+        {
+          "kind": "code",
+          "path": "src/requests/adapters.py",
+          "symbol": "HTTPAdapter.cert_verify",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/adapters.py#L307-L363"
+        },
+        {
+          "kind": "code",
+          "path": "src/requests/adapters.py",
+          "symbol": "HTTPAdapter.get_connection_with_tls_context",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/adapters.py#L455-L510"
+        },
+        {
+          "kind": "code",
+          "path": "src/requests/adapters.py",
+          "symbol": "HTTPAdapter.build_connection_pool_key_attributes",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/adapters.py#L403-L453"
+        },
+        {
+          "kind": "code",
+          "path": "src/requests/adapters.py",
+          "symbol": "HTTPAdapter.send",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/adapters.py#L634-L732"
+        },
+        {
+          "kind": "code",
+          "path": "src/requests/adapters.py",
+          "symbol": "HTTPAdapter.get_connection",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/adapters.py#L512-L553"
+        }
+      ]
+    },
+    {
+      "id": "Q09",
+      "question": "Which adapter method initializes the urllib3 connection pool?",
+      "type": "code",
+      "hit_at_5": true,
+      "first_hit_rank": 2,
+      "retrieval_ms": 94.2,
+      "returned": [
+        {
+          "kind": "code",
+          "path": "src/requests/adapters.py",
+          "symbol": "HTTPAdapter.build_connection_pool_key_attributes",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/adapters.py#L403-L453"
+        },
+        {
+          "kind": "code",
+          "path": "src/requests/adapters.py",
+          "symbol": "HTTPAdapter.init_poolmanager",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/adapters.py#L239-L267"
+        },
+        {
+          "kind": "code",
+          "path": "src/requests/adapters.py",
+          "symbol": "HTTPAdapter.get_connection_with_tls_context",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/adapters.py#L455-L510"
+        },
+        {
+          "kind": "code",
+          "path": "src/requests/adapters.py",
+          "symbol": "HTTPAdapter.get_connection",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/adapters.py#L512-L553"
+        },
+        {
+          "kind": "code",
+          "path": "src/requests/adapters.py",
+          "symbol": "HTTPAdapter",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/adapters.py#L158-L169"
+        }
+      ]
+    },
+    {
+      "id": "Q10",
+      "question": "How does CaseInsensitiveDict retrieve a value regardless of header capitalization?",
+      "type": "code",
+      "hit_at_5": false,
+      "first_hit_rank": null,
+      "retrieval_ms": 86.8,
+      "returned": [
+        {
+          "kind": "code",
+          "path": "src/requests/utils.py",
+          "symbol": "unquote_header_value",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/utils.py#L475-L497"
+        },
+        {
+          "kind": "code",
+          "path": "src/requests/structures.py",
+          "symbol": "CaseInsensitiveDict",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/structures.py#L20-L31"
+        },
+        {
+          "kind": "code",
+          "path": "src/requests/structures.py",
+          "symbol": "CaseInsensitiveDict.copy",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/structures.py#L89-L90"
+        },
+        {
+          "kind": "code",
+          "path": "src/requests/utils.py",
+          "symbol": "default_headers",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/utils.py#L951-L962"
+        },
+        {
+          "kind": "code",
+          "path": "src/requests/structures.py",
+          "symbol": "CaseInsensitiveDict.__setitem__",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/structures.py#L59-L62"
+        }
+      ]
+    },
+    {
+      "id": "Q11",
+      "question": "Where does Requests read credentials from a netrc file?",
+      "type": "code",
+      "hit_at_5": true,
+      "first_hit_rank": 1,
+      "retrieval_ms": 84.4,
+      "returned": [
+        {
+          "kind": "code",
+          "path": "src/requests/utils.py",
+          "symbol": "get_netrc_auth",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/utils.py#L231-L280"
+        },
+        {
+          "kind": "code",
+          "path": "tests/test_requests.py",
+          "symbol": "TestRequests.test_basicauth_with_netrc_leak",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/tests/test_requests.py#L718-L746"
+        },
+        {
+          "kind": "code",
+          "path": "tests/test_requests.py",
+          "symbol": "TestRequests.test_basicauth_with_netrc",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/tests/test_requests.py#L683-L716"
+        },
+        {
+          "kind": "code",
+          "path": "src/requests/sessions.py",
+          "symbol": "SessionRedirectMixin.rebuild_auth",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/sessions.py#L309-L332"
+        },
+        {
+          "kind": "code",
+          "path": "tests/test_utils.py",
+          "symbol": "TestGetNetrcAuth.test_empty_default_credentials_ignored",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/tests/test_utils.py#L173-L181"
+        }
+      ]
+    },
+    {
+      "id": "Q12",
+      "question": "Which function decides whether a URL should bypass configured proxies?",
+      "type": "code",
+      "hit_at_5": true,
+      "first_hit_rank": 1,
+      "retrieval_ms": 174.3,
+      "returned": [
+        {
+          "kind": "code",
+          "path": "src/requests/utils.py",
+          "symbol": "should_bypass_proxies",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/utils.py#L810-L870"
+        },
+        {
+          "kind": "code",
+          "path": "tests/test_utils.py",
+          "symbol": "test_should_bypass_proxies_no_proxy",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/tests/test_utils.py#L825-L844"
+        },
+        {
+          "kind": "code",
+          "path": "tests/test_utils.py",
+          "symbol": "test_should_bypass_proxies",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/tests/test_utils.py#L744-L771"
+        },
+        {
+          "kind": "code",
+          "path": "tests/test_utils.py",
+          "symbol": "test_should_bypass_proxies_pass_only_hostname",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/tests/test_utils.py#L774-L793"
+        },
+        {
+          "kind": "code",
+          "path": "tests/test_utils.py",
+          "symbol": "test_should_bypass_proxies_win_registry",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/tests/test_utils.py#L870-L920"
+        }
+      ]
+    },
+    {
+      "id": "Q13",
+      "question": "How does digest authentication retry after an HTTP 401 challenge?",
+      "type": "code",
+      "hit_at_5": true,
+      "first_hit_rank": 1,
+      "retrieval_ms": 470.3,
+      "returned": [
+        {
+          "kind": "code",
+          "path": "src/requests/auth.py",
+          "symbol": "HTTPDigestAuth.handle_401",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/auth.py#L273-L319"
+        },
+        {
+          "kind": "code",
+          "path": "src/requests/auth.py",
+          "symbol": "HTTPDigestAuth",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/auth.py#L124-L134"
+        },
+        {
+          "kind": "code",
+          "path": "src/requests/auth.py",
+          "symbol": "HTTPDigestAuth.__call__",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/auth.py#L321-L343"
+        },
+        {
+          "kind": "code",
+          "path": "src/requests/auth.py",
+          "symbol": "HTTPDigestAuth.handle_redirect",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/auth.py#L268-L271"
+        },
+        {
+          "kind": "code",
+          "path": "tests/test_requests.py",
+          "symbol": "TestRequests.test_DIGESTAUTH_WRONG_HTTP_401_GET",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/tests/test_requests.py#L794-L808"
+        }
+      ]
+    },
+    {
+      "id": "Q14",
+      "question": "Where does the cookie jar raise an error for duplicate cookie names?",
+      "type": "code",
+      "hit_at_5": true,
+      "first_hit_rank": 2,
+      "retrieval_ms": 610.5,
+      "returned": [
+        {
+          "kind": "code",
+          "path": "tests/test_requests.py",
+          "symbol": "TestRequests.test_cookie_duplicate_names_raises_cookie_conflict_error",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/tests/test_requests.py#L1424-L1433"
+        },
+        {
+          "kind": "code",
+          "path": "src/requests/cookies.py",
+          "symbol": "RequestsCookieJar._find_no_duplicates",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/cookies.py#L423-L452"
+        },
+        {
+          "kind": "code",
+          "path": "src/requests/cookies.py",
+          "symbol": "cookiejar_from_dict",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/cookies.py#L579-L601"
+        },
+        {
+          "kind": "code",
+          "path": "src/requests/cookies.py",
+          "symbol": "RequestsCookieJar.iterkeys",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/cookies.py#L250-L257"
+        },
+        {
+          "kind": "code",
+          "path": "src/requests/cookies.py",
+          "symbol": "RequestsCookieJar._find",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/cookies.py#L401-L421"
+        }
+      ]
+    },
+    {
+      "id": "Q15",
+      "question": "Which function invokes registered response hooks?",
+      "type": "code",
+      "hit_at_5": false,
+      "first_hit_rank": null,
+      "retrieval_ms": 190.0,
+      "returned": [
+        {
+          "kind": "module",
+          "path": "src/requests/hooks.py",
+          "symbol": "hooks",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/hooks.py#L1-L48"
+        },
+        {
+          "kind": "code",
+          "path": "src/requests/hooks.py",
+          "symbol": "default_hooks",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/hooks.py#L25-L26"
+        },
+        {
+          "kind": "code",
+          "path": "src/requests/models.py",
+          "symbol": "RequestHooksMixin.deregister_hook",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/models.py#L272-L281"
+        },
+        {
+          "kind": "code",
+          "path": "src/requests/models.py",
+          "symbol": "Response",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/models.py#L732-L743"
+        },
+        {
+          "kind": "code",
+          "path": "src/requests/sessions.py",
+          "symbol": "merge_hooks",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/sessions.py#L108-L124"
+        }
+      ]
+    },
+    {
+      "id": "Q16",
+      "question": "Where is the request method rewritten during redirects?",
+      "type": "code",
+      "hit_at_5": true,
+      "first_hit_rank": 3,
+      "retrieval_ms": 189.4,
+      "returned": [
+        {
+          "kind": "code",
+          "path": "src/requests/models.py",
+          "symbol": "PreparedRequest.prepare_method",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/models.py#L467-L471"
+        },
+        {
+          "kind": "code",
+          "path": "src/requests/sessions.py",
+          "symbol": "Session.request",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/sessions.py#L557-L653"
+        },
+        {
+          "kind": "code",
+          "path": "src/requests/sessions.py",
+          "symbol": "SessionRedirectMixin.rebuild_method",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/sessions.py#L370-L392"
+        },
+        {
+          "kind": "code",
+          "path": "src/requests/sessions.py",
+          "symbol": "SessionRedirectMixin.resolve_redirects",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/sessions.py#L186-L284"
+        },
+        {
+          "kind": "code",
+          "path": "src/requests/sessions.py",
+          "symbol": "SessionRedirectMixin.resolve_redirects",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/sessions.py#L286-L307"
+        }
+      ]
+    },
+    {
+      "id": "Q17",
+      "question": "Which method maps urllib3 connection and timeout errors into Requests exceptions?",
+      "type": "code",
+      "hit_at_5": false,
+      "first_hit_rank": null,
+      "retrieval_ms": 125.3,
+      "returned": [
+        {
+          "kind": "code",
+          "path": "src/requests/exceptions.py",
+          "symbol": "Timeout",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/exceptions.py#L82-L88"
+        },
+        {
+          "kind": "code",
+          "path": "src/requests/exceptions.py",
+          "symbol": "ConnectTimeout",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/exceptions.py#L91-L95"
+        },
+        {
+          "kind": "module",
+          "path": "src/requests/exceptions.py",
+          "symbol": "exceptions",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/exceptions.py#L1-L60"
+        },
+        {
+          "kind": "code",
+          "path": "src/requests/adapters.py",
+          "symbol": "HTTPAdapter.build_connection_pool_key_attributes",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/adapters.py#L403-L453"
+        },
+        {
+          "kind": "code",
+          "path": "src/requests/exceptions.py",
+          "symbol": "ReadTimeout",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/exceptions.py#L98-L99"
+        }
+      ]
+    },
+    {
+      "id": "Q18",
+      "question": "How are unsafe percent escapes requoted in a URI?",
+      "type": "code",
+      "hit_at_5": true,
+      "first_hit_rank": 1,
+      "retrieval_ms": 424.2,
+      "returned": [
+        {
+          "kind": "code",
+          "path": "src/requests/utils.py",
+          "symbol": "requote_uri",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/utils.py#L704-L723"
+        },
+        {
+          "kind": "code",
+          "path": "src/requests/models.py",
+          "symbol": "PreparedRequest.prepare_url",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/models.py#L483-L563"
+        },
+        {
+          "kind": "code",
+          "path": "tests/test_utils.py",
+          "symbol": "test_requote_uri_with_unquoted_percents",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/tests/test_utils.py#L476-L493"
+        },
+        {
+          "kind": "code",
+          "path": "src/requests/utils.py",
+          "symbol": "unquote_unreserved",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/utils.py#L680-L701"
+        },
+        {
+          "kind": "code",
+          "path": "src/requests/sessions.py",
+          "symbol": "SessionRedirectMixin.get_redirect_target",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/sessions.py#L134-L152"
+        }
+      ]
+    },
+    {
+      "id": "Q19",
+      "question": "What top-level function creates a Session to send an arbitrary HTTP request?",
+      "type": "code",
+      "hit_at_5": false,
+      "first_hit_rank": null,
+      "retrieval_ms": 563.5,
+      "returned": [
+        {
+          "kind": "code",
+          "path": "src/requests/sessions.py",
+          "symbol": "Session.request",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/sessions.py#L557-L653"
+        },
+        {
+          "kind": "code",
+          "path": "src/requests/sessions.py",
+          "symbol": "SessionRedirectMixin.send",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/sessions.py#L132-L132"
+        },
+        {
+          "kind": "code",
+          "path": "src/requests/sessions.py",
+          "symbol": "Session.post",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/sessions.py#L695-L712"
+        },
+        {
+          "kind": "code",
+          "path": "src/requests/sessions.py",
+          "symbol": "SessionRedirectMixin",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/sessions.py#L127-L138"
+        },
+        {
+          "kind": "code",
+          "path": "src/requests/sessions.py",
+          "symbol": "Session.put",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/sessions.py#L714-L726"
+        }
+      ]
+    },
+    {
+      "id": "Q20",
+      "question": "Where is a streaming request body detected and prepared?",
+      "type": "code",
+      "hit_at_5": true,
+      "first_hit_rank": 1,
+      "retrieval_ms": 160.8,
+      "returned": [
+        {
+          "kind": "code",
+          "path": "src/requests/models.py",
+          "symbol": "PreparedRequest.prepare_body",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/models.py#L576-L652"
+        },
+        {
+          "kind": "code",
+          "path": "src/requests/models.py",
+          "symbol": "PreparedRequest.prepare_content_length",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/models.py#L654-L668"
+        },
+        {
+          "kind": "code",
+          "path": "src/requests/models.py",
+          "symbol": "PreparedRequest",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/models.py#L378-L389"
+        },
+        {
+          "kind": "code",
+          "path": "src/requests/models.py",
+          "symbol": "PreparedRequest.__init__",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/models.py#L407-L422"
+        },
+        {
+          "kind": "code",
+          "path": "src/requests/models.py",
+          "symbol": "PreparedRequest.copy",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/models.py#L456-L465"
+        }
+      ]
+    },
+    {
+      "id": "Q21",
+      "question": "Which PR fixed multipart file detection for wrappers that expose methods through __getattr__?",
+      "type": "history",
+      "hit_at_5": true,
+      "first_hit_rank": 2,
+      "retrieval_ms": 655.1,
+      "returned": [
+        {
+          "kind": "pr",
+          "path": "PR#7433",
+          "symbol": "Fix `prepare_body` stream detection for `__getattr__`-based file wrappers",
+          "url": "https://github.com/psf/requests/pull/7433"
+        },
+        {
+          "kind": "pr",
+          "path": "PR#7502",
+          "symbol": "Fix `_encode_files` detection for `__getattr__`-based file wrappers",
+          "url": "https://github.com/psf/requests/pull/7502"
+        },
+        {
+          "kind": "commit",
+          "path": "",
+          "symbol": "Fix `prepare_body` stream detection for `__getattr__`-based file wrappers (#7433)",
+          "url": "https://github.com/psf/requests/commit/6404f345e562d962abe6700a1c357ec1e7e18232"
+        },
+        {
+          "kind": "code",
+          "path": "src/requests/utils.py",
+          "symbol": "guess_filename",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/utils.py#L283-L287"
+        },
+        {
+          "kind": "code",
+          "path": "src/requests/models.py",
+          "symbol": "RequestEncodingMixin._encode_files",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/models.py#L182-L251"
+        }
+      ]
+    },
+    {
+      "id": "Q22",
+      "question": "Why was a hasattr __iter__ fallback added to streaming request body detection?",
+      "type": "history",
+      "hit_at_5": true,
+      "first_hit_rank": 1,
+      "retrieval_ms": 538.1,
+      "returned": [
+        {
+          "kind": "pr",
+          "path": "PR#7433",
+          "symbol": "Fix `prepare_body` stream detection for `__getattr__`-based file wrappers",
+          "url": "https://github.com/psf/requests/pull/7433"
+        },
+        {
+          "kind": "commit",
+          "path": "",
+          "symbol": "Fix `prepare_body` stream detection for `__getattr__`-based file wrappers (#7433)",
+          "url": "https://github.com/psf/requests/commit/6404f345e562d962abe6700a1c357ec1e7e18232"
+        },
+        {
+          "kind": "code",
+          "path": "src/requests/models.py",
+          "symbol": "PreparedRequest.prepare_body",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/models.py#L576-L652"
+        },
+        {
+          "kind": "pr",
+          "path": "PR#7505",
+          "symbol": "Add hasattr checks for remaining protocol isinstance checks",
+          "url": "https://github.com/psf/requests/pull/7505"
+        },
+        {
+          "kind": "code",
+          "path": "src/requests/cookies.py",
+          "symbol": "RequestsCookieJar.__iter__",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/cookies.py#L348-L350"
+        }
+      ]
+    },
+    {
+      "id": "Q23",
+      "question": "Why was no_proxy behavior changed to respect domain boundaries?",
+      "type": "history",
+      "hit_at_5": true,
+      "first_hit_rank": 1,
+      "retrieval_ms": 395.7,
+      "returned": [
+        {
+          "kind": "pr",
+          "path": "PR#7427",
+          "symbol": "Port bpo-39057 to Requests",
+          "url": "https://github.com/psf/requests/pull/7427"
+        },
+        {
+          "kind": "pr",
+          "path": "PR#7505",
+          "symbol": "Add hasattr checks for remaining protocol isinstance checks",
+          "url": "https://github.com/psf/requests/pull/7505"
+        },
+        {
+          "kind": "code",
+          "path": "tests/test_utils.py",
+          "symbol": "test_should_bypass_proxies_no_proxy_domain_boundary",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/tests/test_utils.py#L847-L867"
+        },
+        {
+          "kind": "pr_comment",
+          "path": "PR#7433",
+          "symbol": "comment-1",
+          "url": "https://github.com/psf/requests/pull/7433#issuecomment-4432225923"
+        },
+        {
+          "kind": "pr_comment",
+          "path": "PR#7433",
+          "symbol": "comment-3",
+          "url": "https://github.com/psf/requests/pull/7433#issuecomment-4432457366"
+        }
+      ]
+    },
+    {
+      "id": "Q24",
+      "question": "Why did the Requests maintainers add a generative AI contribution policy?",
+      "type": "history",
+      "hit_at_5": true,
+      "first_hit_rank": 1,
+      "retrieval_ms": 284.3,
+      "returned": [
+        {
+          "kind": "pr",
+          "path": "PR#7490",
+          "symbol": "Add AI Policy",
+          "url": "https://github.com/psf/requests/pull/7490"
+        },
+        {
+          "kind": "commit",
+          "path": "",
+          "symbol": "Add AI Policy",
+          "url": "https://github.com/psf/requests/commit/c4367f231b5dc54f23f2983828562ce3a7555a8a"
+        },
+        {
+          "kind": "pr",
+          "path": "PR#7576",
+          "symbol": "Fix link to AI Policy in CONTRIBUTING.md",
+          "url": "https://github.com/psf/requests/pull/7576"
+        },
+        {
+          "kind": "code",
+          "path": "src/requests/cookies.py",
+          "symbol": "RequestsCookieJar.get_policy",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/cookies.py#L474-L476"
+        },
+        {
+          "kind": "docs",
+          "path": ".github/AI_POLICY.md",
+          "symbol": "Generative AI / LLM Policy",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/.github/AI_POLICY.md#L1-L29"
+        }
+      ]
+    },
+    {
+      "id": "Q25",
+      "question": "Why were mutable header input types reconsidered in Requests 2.34?",
+      "type": "history",
+      "hit_at_5": true,
+      "first_hit_rank": 1,
+      "retrieval_ms": 748.1,
+      "returned": [
+        {
+          "kind": "pr",
+          "path": "PR#7431",
+          "symbol": "Fix mutability issues with headers input types",
+          "url": "https://github.com/psf/requests/pull/7431"
+        },
+        {
+          "kind": "pr",
+          "path": "PR#7441",
+          "symbol": "Move Request.headers back to Mapping",
+          "url": "https://github.com/psf/requests/pull/7441"
+        },
+        {
+          "kind": "code",
+          "path": "tests/test_requests.py",
+          "symbol": "TestRequests.test_header_with_subclass_types",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/tests/test_requests.py#L1861-L1884"
+        },
+        {
+          "kind": "module",
+          "path": "src/requests/_types.py",
+          "symbol": "_types",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/_types.py#L1-L60"
+        },
+        {
+          "kind": "pr",
+          "path": "PR#7445",
+          "symbol": "v2.34.2",
+          "url": "https://github.com/psf/requests/pull/7445"
+        }
+      ]
+    }
+  ]
+}
