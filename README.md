@@ -23,7 +23,7 @@ git -C data/requests checkout 3c7baaa05ab4aa49cc819ce3a819d260de19c157
 .\.venv\Scripts\python.exe -m uvicorn gitcontext.web:app --host 127.0.0.1 --port 8000
 ```
 
-Open `http://127.0.0.1:8000/`. `/api/ask?q=...` returns a generated answer and evidence; `/api/search?q=...` returns retrieval results only. The web app starts the local model server automatically on port 18081 and stops it on shutdown. On CPU, generated answers can take several seconds after retrieval.
+Open `http://127.0.0.1:8000/`. `/api/ask?q=...` returns a generated answer and evidence; `/api/search?q=...` returns retrieval results only. The web app starts the local model server automatically on port 18081 and stops it on shutdown. On this laptop's CPU, a generated answer took roughly two minutes in live checks; the model is still a small prototype and its explanations require checking against the linked source.
 
 ## Evidence contract
 
