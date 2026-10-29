@@ -1,10 +1,12 @@
 from __future__ import annotations
 
 import argparse
+import asyncio
 import json
 import subprocess
 from pathlib import Path
 
+from .answer import LocalGenerator, select_answer_evidence
 from .core import Index, collect_files, collect_history, collect_prs
 from .evaluate import evaluate
 
@@ -70,13 +72,22 @@ def main() -> None:
             print(f"Indexed {count} chunks at {commit}: {len(files)} file, {len(history)} commit, {len(prs)} PR")
         elif args.command == "ask":
             result = index.search(args.question, args.k)
+            result["results"] = select_answer_evidence(result["results"])
+            async def generate():
+                generator = LocalGenerator()
+                try:
+                    await generator.start()
+                    return await generator.answer(args.question, result["results"])
+                finally:
+                    await generator.close()
+            result["answer"] = asyncio.run(generate())
             if args.json:
                 print(json.dumps(result, indent=2))
             else:
                 print(f"Indexed {result['repo']} at {result['indexed_commit']} | retrieval {result['retrieval_ms']} ms")
-                print(f"Starting answer: {result['answer']['text']}")
-                if result["answer"]["url"]:
-                    print(result["answer"]["url"])
+                print(f"Answer: {result['answer']['text']}")
+                for citation in result["answer"]["citations"]:
+                    print(f"[{citation['number']}] {citation['url']}")
                 for i, row in enumerate(result["results"], 1):
                     print(f"\n[{i}] {row['kind']} {row['path']} {row['symbol']}\n{row['url']}\n{row['text'][:500]}")
         elif args.command == "eval":

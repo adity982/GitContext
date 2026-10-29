@@ -283,22 +283,6 @@ class Index:
             for row in rows:
                 row["rank_score"] = scores[row["id"]] * 100
         selected = rows[:k]
-        answer = self._extractive_answer(selected)
         return {"query": query, "repo": self.state("repo"), "indexed_commit": self.state("commit"),
                 "retrieval_ms": round(retrieved_ms, 1), "total_ms": round((time.perf_counter() - started) * 1000, 1),
-                "answer": answer, "results": selected}
-
-    @staticmethod
-    def _extractive_answer(rows: list[dict]) -> dict:
-        if not rows:
-            return {"text": "No matching source was found in this index.", "url": None}
-        top = rows[0]
-        if top["kind"] in {"pr", "pr_comment", "commit"}:
-            body = top["text"].split("\n", 1)[-1].strip()
-            first_paragraph = body.split("\n\n", 1)[0].strip()
-            if first_paragraph:
-                return {"text": f"The recorded explanation in {top['path'] or top['symbol']} says: {first_paragraph[:500]}",
-                        "url": top["url"]}
-        location = f"{top['path']}:{top['start_line']}" if top["start_line"] else top["path"]
-        return {"text": f"The strongest indexed source is {top['symbol']} at {location}. Open it to inspect the implementation and nearby context.",
-                "url": top["url"]}
+                "results": selected}

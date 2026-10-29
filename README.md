@@ -1,12 +1,14 @@
 # GitContext — public repository evidence demo
 
-GitContext is a first-milestone prototype for exploring why code behaves as it does. It indexes a **pinned public revision** of `psf/requests`, recent commits, and a cached set of merged PR descriptions and conversation comments. It retrieves source evidence with dense vectors and SQLite FTS5 BM25, fuses both rankings, and applies a transparent code-aware reranker. The web and CLI views link to the original file, commit, or PR.
+[![CI](https://github.com/adity982/GitContext/actions/workflows/ci.yml/badge.svg)](https://github.com/adity982/GitContext/actions/workflows/ci.yml)
 
-This milestone is an **evidence retrieval demo**. It shows an extractive, source-linked starting answer and ranked evidence; it does not use an LLM to synthesize a full explanation or claim that a top result proves intent. It does not support private repositories, permission filtering, automatic updates, incident connectors, or production serving. Those belong to later milestones.
+GitContext is a first-milestone prototype for exploring why code behaves as it does. It indexes a **pinned public revision** of `psf/requests`, recent commits, and a cached set of merged PR descriptions and conversation comments. It retrieves source evidence with dense vectors and SQLite FTS5 BM25, fuses both rankings, and applies a transparent code-aware reranker. A local Qwen model generates an answer from that evidence, with links to the original file, commit, or PR.
+
+This milestone runs entirely on the local machine after downloading the model. It does not support private repositories, permission filtering, automatic updates, incident connectors, or production serving. Generated answers receive only retrieved evidence and their citation numbers are checked, but the small local model can still make unsupported interpretations. Answer correctness has not been independently graded; inspect the linked source before relying on an explanation.
 
 ## Setup (Windows PowerShell)
 
-Requires Python 3.12, Git, and GitHub CLI authentication for the PR cache. The embedding model downloads on first indexing run.
+Requires Python 3.12, Git, and GitHub CLI authentication for the PR cache. The embedding model downloads on first indexing run. Local answer generation uses the official Qwen3 1.7B Q8 model (about 1.8 GB) and a pinned Windows CPU build of llama.cpp; `setup_model` downloads and verifies both. No API key is needed.
 
 ```powershell
 py -3.12 -m venv .venv
@@ -15,12 +17,13 @@ git clone https://github.com/psf/requests.git data/requests
 git -C data/requests checkout 3c7baaa05ab4aa49cc819ce3a819d260de19c157
 .\.venv\Scripts\python.exe -m gitcontext.cli fetch-prs --limit 25
 .\.venv\Scripts\python.exe -m gitcontext.cli index
+.\.venv\Scripts\python.exe -m gitcontext.setup_model
 .\.venv\Scripts\python.exe -m gitcontext.cli ask "Where does Requests strip redirect authorization?"
 .\.venv\Scripts\python.exe -m gitcontext.cli eval
 .\.venv\Scripts\python.exe -m uvicorn gitcontext.web:app --host 127.0.0.1 --port 8000
 ```
 
-Open `http://127.0.0.1:8000/`. The API is available at `/api/search?q=...`.
+Open `http://127.0.0.1:8000/`. `/api/ask?q=...` returns a generated answer and evidence; `/api/search?q=...` returns retrieval results only. The web app starts the local model server automatically on port 18081 and stops it on shutdown. On CPU, generated answers can take several seconds after retrieval.
 
 ## Evidence contract
 
@@ -30,7 +33,7 @@ The demo uses Python's standard-library AST parser for Python functions, methods
 
 ## Evaluation
 
-`eval/questions.json` contains 25 fixed, manually written questions: 20 code-location and 5 PR-history questions. Each has a source locator as a gold label. `python -m gitcontext.cli eval` writes `eval/report.json` with Recall@5 by category and retrieval latency. The labels test whether a relevant source appears in the top five, **not** whether a natural-language answer is correct or each claim is supported. Question writers inspected the repository and PR bodies to define source locators; independent human answer grading has not been done.
+`eval/questions.json` contains 25 fixed, manually written questions: 20 code-location and 5 PR-history questions. Each has a source locator as a gold label. `python -m gitcontext.cli eval` writes `eval/report.json` with Recall@5 by category and retrieval latency. The labels test whether a relevant source appears in the top five, **not** whether a generated answer is correct or each claim is supported. Question writers inspected the repository and PR bodies to define source locators; independent human answer grading has not been done.
 
 The recorded local run at commit `3c7baaa05ab4aa49cc819ce3a819d260de19c157` indexed 908 chunks and found the labeled source in the top five for **21/25 questions (84%)**: 16/20 code questions and 5/5 PR-history questions. Median retrieval time was **174.3 ms**, and p95 was **655.1 ms**, measured in one warm, sequential run on this Windows machine. These timings exclude model initialization and indexing. The four missed labels were Q10, Q15, Q17, and Q19; their returned candidates are preserved in the report.
 

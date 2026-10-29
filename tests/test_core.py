@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from gitcontext.core import Index, _python_chunks, lexical_text
+from gitcontext.core import _python_chunks, lexical_text
 from gitcontext.evaluate import matches
 
 
@@ -21,11 +21,3 @@ def test_lexical_text_keeps_identifiers_and_parts():
 def test_gold_requires_all_fields():
     assert matches({"kind": "pr", "path": "PR#42"}, {"kind": "pr", "path": "PR#42"})
     assert not matches({"kind": "code", "path": "PR#42"}, {"kind": "pr", "path": "PR#42"})
-
-
-def test_extractive_answer_keeps_source_link():
-    result = Index._extractive_answer([{"kind": "pr", "path": "PR#42", "symbol": "Fix",
-                                       "text": "Fix\nThis resolves the timeout.",
-                                       "url": "https://github.com/org/repo/pull/42"}])
-    assert "resolves the timeout" in result["text"]
-    assert result["url"].endswith("/42")
