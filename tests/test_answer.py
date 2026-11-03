@@ -1,6 +1,6 @@
 import pytest
 
-from gitcontext.answer import evidence_prompt, select_answer_evidence, validate_answer
+from gitcontext.answer import evidence_prompt, retrieval_fallback, select_answer_evidence, validate_answer
 from gitcontext.web import _answer_html
 
 
@@ -25,11 +25,40 @@ def test_generated_answer_requires_existing_citations():
     assert answer["citations"][0]["url"] == SOURCES[0]["url"]
 
 
+def test_generated_answer_rejects_broken_shape():
+    with pytest.raises(ValueError):
+        validate_answer(("word " * 91) + "[1]", SOURCES)
+    with pytest.raises(ValueError):
+        validate_answer("First paragraph. [1]\n\nSecond paragraph. [1]", SOURCES)
+
+
+def test_retrieval_fallback_names_and_links_ranked_evidence():
+    sources = [{**SOURCES[0], "symbol": f"source_{number}"} for number in range(2)]
+    answer = retrieval_fallback(sources)
+    assert answer["mode"] == "retrieval_fallback"
+    assert "source_0" in answer["text"]
+    assert "source_1" in answer["text"]
+    assert [item["number"] for item in answer["citations"]] == [1, 2]
+
+
 def test_answer_evidence_omits_thin_code_declarations():
     thin = {**SOURCES[0], "symbol": "RedirectMixin", "text": "class RedirectMixin:\n    def send(self): ...\n" * 10}
     substantive = {**SOURCES[0], "text": SOURCES[0]["text"] * 20}
     selected = select_answer_evidence([thin, substantive])
     assert selected == [substantive]
+
+
+def test_answer_evidence_caps_generation_context_at_two_ranked_sources():
+    sources = [
+        {**SOURCES[0], "symbol": f"source_{index}", "text": SOURCES[0]["text"] * 20}
+        for index in range(3)
+    ]
+    selected = select_answer_evidence(sources)
+    prompt = evidence_prompt("How are redirects handled?", selected)
+    assert selected == sources[:2]
+    assert "source_0" in prompt[1]["content"]
+    assert "source_1" in prompt[1]["content"]
+    assert "source_2" not in prompt[1]["content"]
 
 
 def test_answer_html_links_citations_and_escapes_model_text():

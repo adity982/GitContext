@@ -19,7 +19,7 @@ MODEL_URL = "http://127.0.0.1:18081"
 CITATION = re.compile(r"\[(\d+)\]")
 
 
-def select_answer_evidence(results: list[dict], limit: int = 4) -> list[dict]:
+def select_answer_evidence(results: list[dict], limit: int = 2) -> list[dict]:
     """Keep substantive excerpts for generation while preserving ranked order."""
     substantive = [
         item for item in results
@@ -38,9 +38,9 @@ def select_answer_evidence(results: list[dict], limit: int = 4) -> list[dict]:
 
 def evidence_prompt(question: str, results: list[dict]) -> list[dict]:
     sources = []
-    for n, item in enumerate(results[:4], 1):
+    for n, item in enumerate(results[:2], 1):
         location = f"{item['path']}:{item['start_line']}-{item['end_line']}" if item["start_line"] else item["path"]
-        limit = (2800, 700, 700, 400)[n - 1]
+        limit = (2800, 900)[n - 1]
         raw = item["text"].strip()
         if item["kind"] == "code":
             raw = "\n".join(line.strip() for line in raw.splitlines()
@@ -54,9 +54,9 @@ def evidence_prompt(question: str, results: list[dict]) -> list[dict]:
             "including only conditions, request changes, and stopping behavior visibly present in the shown code. "
             "Do not infer behavior from a class name, type stub, exception name, or omitted code. "
             "Prefer the implementation body over declarations, and do not claim a source says something "
-            "unless that exact behavior appears in its excerpt. Write 2 short paragraphs totaling at most "
-            "110 words. Put a relevant source citation like [1] at the end "
-            "of EACH paragraph. Cite only evidence that supports that paragraph. Do not add a "
+            "unless that exact behavior appears in its excerpt. State exceptions exactly as written; do not "
+            "collapse multiple conditions into a broader rule. Write one paragraph of at most 90 words and "
+            "put relevant source citations like [1] at the end. Cite only evidence that supports the paragraph. Do not add a "
             "separate citations list. Focus on the implementation that directly answers the question; "
             "ignore unrelated wrappers and nearby code. If the evidence cannot establish "
             "a detail, say so. Do not invent code, PRs, or citations. "
@@ -69,13 +69,39 @@ def evidence_prompt(question: str, results: list[dict]) -> list[dict]:
 def validate_answer(text: str, results: list[dict]) -> dict:
     cleaned = re.sub(r"<think>.*?</think>", "", text, flags=re.DOTALL).strip()
     numbers = sorted({int(value) for value in CITATION.findall(cleaned)})
-    if not cleaned or not numbers or any(n < 1 or n > len(results) for n in numbers):
+    if (
+        not cleaned
+        or not numbers
+        or any(n < 1 or n > len(results) for n in numbers)
+        or len(cleaned.split()) > 90
+        or "\n\n" in cleaned
+    ):
         raise ValueError("The local model did not return an answer with valid source citations.")
     return {
         "text": cleaned,
         "citations": [{"number": n, "url": results[n - 1]["url"],
                        "label": results[n - 1]["symbol"]} for n in numbers],
         "mode": "generated",
+    }
+
+
+def retrieval_fallback(results: list[dict]) -> dict:
+    """Return a safe answer when the small local model breaks its evidence contract."""
+    labels = [item["symbol"] for item in results[:2]]
+    if len(labels) == 1:
+        text = f"The strongest retrieved evidence is `{labels[0]}`. Inspect its linked excerpt for the exact behavior. [1]"
+    else:
+        text = (
+            f"The strongest retrieved evidence is `{labels[0]}`, followed by `{labels[1]}`. "
+            "Inspect both linked excerpts for the exact behavior; the local model's explanation was withheld "
+            "because it did not satisfy the evidence contract. [1] [2]"
+        )
+    numbers = range(1, min(len(results), 2) + 1)
+    return {
+        "text": text,
+        "citations": [{"number": n, "url": results[n - 1]["url"],
+                       "label": results[n - 1]["symbol"]} for n in numbers],
+        "mode": "retrieval_fallback",
     }
 
 
@@ -141,6 +167,9 @@ class LocalGenerator:
                 response.raise_for_status()
                 choice = response.json()["choices"][0]
                 if choice.get("finish_reason") == "length":
-                    raise ValueError("The local model reached its output limit before finishing the answer.")
+                    return retrieval_fallback(results)
                 content = choice["message"]["content"]
-        return validate_answer(content, results)
+        try:
+            return validate_answer(content, results)
+        except ValueError:
+            return retrieval_fallback(results)
