@@ -85,24 +85,34 @@ def validate_answer(text: str, results: list[dict]) -> dict:
     }
 
 
-def retrieval_fallback(results: list[dict]) -> dict:
-    """Return a safe answer when the small local model breaks its evidence contract."""
+def retrieval_answer(results: list[dict]) -> dict:
+    """Return ranked evidence without asking a model to explain it."""
     labels = [item["symbol"] for item in results[:2]]
     if len(labels) == 1:
         text = f"The strongest retrieved evidence is `{labels[0]}`. Inspect its linked excerpt for the exact behavior. [1]"
     else:
         text = (
             f"The strongest retrieved evidence is `{labels[0]}`, followed by `{labels[1]}`. "
-            "Inspect both linked excerpts for the exact behavior; the local model's explanation was withheld "
-            "because it did not satisfy the evidence contract. [1] [2]"
+            "Inspect both linked excerpts for the exact behavior. No model explanation was requested. [1] [2]"
         )
     numbers = range(1, min(len(results), 2) + 1)
     return {
         "text": text,
         "citations": [{"number": n, "url": results[n - 1]["url"],
                        "label": results[n - 1]["symbol"]} for n in numbers],
-        "mode": "retrieval_fallback",
+        "mode": "retrieval_only",
     }
+
+
+def retrieval_fallback(results: list[dict]) -> dict:
+    """Return a safe answer when the small local model breaks its evidence contract."""
+    answer = retrieval_answer(results)
+    answer["text"] = answer["text"].replace(
+        "No model explanation was requested.",
+        "The local model's explanation was withheld because it did not satisfy the evidence contract.",
+    )
+    answer["mode"] = "retrieval_fallback"
+    return answer
 
 
 class LocalGenerator:
@@ -155,7 +165,7 @@ class LocalGenerator:
         if self._log:
             self._log.close()
 
-    async def answer(self, question: str, results: list[dict]) -> dict:
+    async def answer(self, question: str, results: list[dict], include_diagnostics: bool = False) -> dict:
         if not results:
             return {"text": "I could not find relevant evidence in this indexed repository.",
                     "citations": [], "mode": "abstained"}
@@ -167,9 +177,17 @@ class LocalGenerator:
                 response.raise_for_status()
                 choice = response.json()["choices"][0]
                 if choice.get("finish_reason") == "length":
-                    return retrieval_fallback(results)
+                    fallback = retrieval_fallback(results)
+                    if include_diagnostics:
+                        fallback["fallback_reason"] = "finish_reason=length"
+                        fallback["model_output"] = choice["message"]["content"]
+                    return fallback
                 content = choice["message"]["content"]
         try:
             return validate_answer(content, results)
-        except ValueError:
-            return retrieval_fallback(results)
+        except ValueError as exc:
+            fallback = retrieval_fallback(results)
+            if include_diagnostics:
+                fallback["fallback_reason"] = str(exc)
+                fallback["model_output"] = content
+            return fallback

@@ -1,0 +1,965 @@
+{
+  "summary": {
+    "repo": "psf/requests",
+    "indexed_commit": "3c7baaa05ab4aa49cc819ce3a819d260de19c157",
+    "questions": 25,
+    "modes": {
+      "generated": 9,
+      "retrieval_fallback": 16
+    },
+    "generated_rate": 0.36,
+    "gold_in_generation_context_rate": 0.8,
+    "median_answer_ms": 49032.0,
+    "p95_answer_ms": 65125.0,
+    "scope": "objective pipeline signals only; preserved answers and citations require human review for correctness and claim-level support"
+  },
+  "details": [
+    {
+      "id": "Q01",
+      "question": "When does Requests remove Authorization while following a redirect?",
+      "type": "code",
+      "gold_in_generation_context": true,
+      "retrieval_ms": 17.3,
+      "answer_ms": 56875.0,
+      "answer": {
+        "text": "The strongest retrieved evidence is `SessionRedirectMixin.should_strip_auth`, followed by `SessionRedirectMixin.rebuild_auth`. Inspect both linked excerpts for the exact behavior; the local model's explanation was withheld because it did not satisfy the evidence contract. [1] [2]",
+        "citations": [
+          {
+            "number": 1,
+            "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/sessions.py#L154-L184",
+            "label": "SessionRedirectMixin.should_strip_auth"
+          },
+          {
+            "number": 2,
+            "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/sessions.py#L309-L332",
+            "label": "SessionRedirectMixin.rebuild_auth"
+          }
+        ],
+        "mode": "retrieval_fallback",
+        "fallback_reason": "The local model did not return an answer with valid source citations.",
+        "model_output": "The `should_strip_auth` method in `SessionRedirectMixin` determines whether to remove the `Authorization` header during a redirect. It checks if the host, scheme, or port has changed between the old and new URLs. If any of these changes occur, the header is removed. The `rebuild_auth` method then handles reapplying authentication if needed. This behavior is explicitly defined in the code [1] and [2], and it only removes the `Authorization` header when conditions are met, such as when the host or scheme changes. The method does not remove the header by default and only does so when necessary [1]. \n\nThe code does not remove the `Authorization` header by default and only does so when the host, scheme, or port changes between the old and new URLs. It does not remove the header if the host remains the same and the scheme or port remains unchanged [1]."
+      },
+      "generation_context": [
+        {
+          "kind": "code",
+          "path": "src/requests/sessions.py",
+          "symbol": "SessionRedirectMixin.should_strip_auth",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/sessions.py#L154-L184"
+        },
+        {
+          "kind": "code",
+          "path": "src/requests/sessions.py",
+          "symbol": "SessionRedirectMixin.rebuild_auth",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/sessions.py#L309-L332"
+        }
+      ]
+    },
+    {
+      "id": "Q02",
+      "question": "Where are environment proxy and certificate settings combined with explicit request settings?",
+      "type": "code",
+      "gold_in_generation_context": true,
+      "retrieval_ms": 64.5,
+      "answer_ms": 72375.0,
+      "answer": {
+        "text": "The strongest retrieved evidence is `Session.merge_environment_settings`, followed by `Session.prepare_request`. Inspect both linked excerpts for the exact behavior; the local model's explanation was withheld because it did not satisfy the evidence contract. [1] [2]",
+        "citations": [
+          {
+            "number": 1,
+            "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/sessions.py#L831-L868",
+            "label": "Session.merge_environment_settings"
+          },
+          {
+            "number": 2,
+            "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/sessions.py#L511-L555",
+            "label": "Session.prepare_request"
+          }
+        ],
+        "mode": "retrieval_fallback",
+        "fallback_reason": "The local model did not return an answer with valid source citations.",
+        "model_output": "The environment proxy and certificate settings are combined with explicit request settings in the `merge_environment_settings` method [1], which merges environment-provided proxy and certificate settings with the session's explicit settings. This method checks if the session trusts environment variables and merges proxy settings from the environment with the provided `proxies` dictionary. Similarly, certificate settings are merged with the explicit `cert` parameter. The `prepare_request` method [2] then uses these merged settings to construct the final request. The merging process ensures that environment variables take precedence if they are provided, while explicit settings are combined accordingly. \n\nThe method explicitly checks for `proxies` and `cert` parameters and merges them with the environment settings, ensuring that the final request includes both explicit and environment-based configurations. If no explicit settings are provided, the environment variables are used. If both are provided, the explicit settings take precedence. The merging is done through the `merge_setting` function, which handles the combination of values."
+      },
+      "generation_context": [
+        {
+          "kind": "code",
+          "path": "src/requests/sessions.py",
+          "symbol": "Session.merge_environment_settings",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/sessions.py#L831-L868"
+        },
+        {
+          "kind": "code",
+          "path": "src/requests/sessions.py",
+          "symbol": "Session.prepare_request",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/sessions.py#L511-L555"
+        }
+      ]
+    },
+    {
+      "id": "Q03",
+      "question": "How does a Session prepare a Request with cookies and authentication?",
+      "type": "code",
+      "gold_in_generation_context": true,
+      "retrieval_ms": 92.7,
+      "answer_ms": 52766.0,
+      "answer": {
+        "text": "The `Session.prepare_request` method constructs a `PreparedRequest` by merging the request's settings with the session's settings. It handles cookies by converting the request's cookies into a `CookieJar` if necessary and merges them with the session's cookies. Authentication is handled by checking the request's authentication and, if not provided, using `get_netrc_auth` to retrieve credentials from the environment. The `prepare_cookies` method ensures that the cookie data is properly formatted into a `Cookie` header for the request. [1] [2]",
+        "citations": [
+          {
+            "number": 1,
+            "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/sessions.py#L511-L555",
+            "label": "Session.prepare_request"
+          },
+          {
+            "number": 2,
+            "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/models.py#L699-L720",
+            "label": "PreparedRequest.prepare_cookies"
+          }
+        ],
+        "mode": "generated"
+      },
+      "generation_context": [
+        {
+          "kind": "code",
+          "path": "src/requests/sessions.py",
+          "symbol": "Session.prepare_request",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/sessions.py#L511-L555"
+        },
+        {
+          "kind": "code",
+          "path": "src/requests/models.py",
+          "symbol": "PreparedRequest.prepare_cookies",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/models.py#L699-L720"
+        }
+      ]
+    },
+    {
+      "id": "Q04",
+      "question": "Which method splits a streaming response into lines?",
+      "type": "code",
+      "gold_in_generation_context": true,
+      "retrieval_ms": 104.3,
+      "answer_ms": 38812.0,
+      "answer": {
+        "text": "The `iter_lines` method in the `Response` class splits a streaming response into lines, handling the splitting based on the `delimiter` parameter. If a delimiter is provided, it splits the chunk into lines using `split(delimiter)`, and if no delimiter is provided, it uses `splitlines()`. The method also manages pending chunks and ensures lines are yielded correctly. This implementation directly addresses the question by explicitly splitting the data into lines as required [1].",
+        "citations": [
+          {
+            "number": 1,
+            "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/models.py#L994-L1032",
+            "label": "Response.iter_lines"
+          }
+        ],
+        "mode": "generated"
+      },
+      "generation_context": [
+        {
+          "kind": "code",
+          "path": "src/requests/models.py",
+          "symbol": "Response.iter_lines",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/models.py#L994-L1032"
+        },
+        {
+          "kind": "code",
+          "path": "src/requests/models.py",
+          "symbol": "Response.iter_content",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/models.py#L914-L977"
+        }
+      ]
+    },
+    {
+      "id": "Q05",
+      "question": "How does Response parse JSON and handle decoding errors?",
+      "type": "code",
+      "gold_in_generation_context": true,
+      "retrieval_ms": 81.1,
+      "answer_ms": 51125.0,
+      "answer": {
+        "text": "The strongest retrieved evidence is `Response.json`, followed by `HTTPDigestAuth.handle_401`. Inspect both linked excerpts for the exact behavior; the local model's explanation was withheld because it did not satisfy the evidence contract. [1] [2]",
+        "citations": [
+          {
+            "number": 1,
+            "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/models.py#L1091-L1124",
+            "label": "Response.json"
+          },
+          {
+            "number": 2,
+            "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/auth.py#L273-L319",
+            "label": "HTTPDigestAuth.handle_401"
+          }
+        ],
+        "mode": "retrieval_fallback",
+        "fallback_reason": "The local model did not return an answer with valid source citations.",
+        "model_output": "The `Response.json()` method in `src/requests/models.py` attempts to decode the JSON response body into a Python object. It first checks if the content is valid JSON by attempting to decode it with a guessed encoding and using `complexjson.loads()`. If a `UnicodeDecodeError` occurs, it skips to the next attempt using `self.text` directly. If a `JSONDecodeError` is raised, it raises a `RequestsJSONDecodeError` with the error message, document position, and line number. The method does not handle decoding errors in a different way, such as by returning a default value or logging the error. [1]"
+      },
+      "generation_context": [
+        {
+          "kind": "code",
+          "path": "src/requests/models.py",
+          "symbol": "Response.json",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/models.py#L1091-L1124"
+        },
+        {
+          "kind": "code",
+          "path": "src/requests/auth.py",
+          "symbol": "HTTPDigestAuth.handle_401",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/auth.py#L273-L319"
+        }
+      ]
+    },
+    {
+      "id": "Q06",
+      "question": "Where is Content-Length determined for a prepared request body?",
+      "type": "code",
+      "gold_in_generation_context": true,
+      "retrieval_ms": 69.6,
+      "answer_ms": 34875.0,
+      "answer": {
+        "text": "The `Content-Length` header for a prepared request body is determined in the `prepare_content_length` method of the `PreparedRequest` class. This method checks if the `body` is not `None` and calculates the length using `super_len(body)`. If the length is found, it sets the `Content-Length` header to the calculated value. If no length is found and the method is not `GET` or `HEAD`, it sets the header to `\"0\"`. The implementation directly addresses the determination of `Content-Length` based on the provided body [1].",
+        "citations": [
+          {
+            "number": 1,
+            "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/models.py#L654-L668",
+            "label": "PreparedRequest.prepare_content_length"
+          }
+        ],
+        "mode": "generated"
+      },
+      "generation_context": [
+        {
+          "kind": "code",
+          "path": "src/requests/models.py",
+          "symbol": "PreparedRequest.prepare_content_length",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/models.py#L654-L668"
+        },
+        {
+          "kind": "code",
+          "path": "src/requests/models.py",
+          "symbol": "PreparedRequest.prepare_body",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/models.py#L576-L652"
+        }
+      ]
+    },
+    {
+      "id": "Q07",
+      "question": "Which function constructs multipart upload fields from files?",
+      "type": "code",
+      "gold_in_generation_context": true,
+      "retrieval_ms": 92.3,
+      "answer_ms": 51781.0,
+      "answer": {
+        "text": "The strongest retrieved evidence is `RequestEncodingMixin._encode_files`, followed by `Request`. Inspect both linked excerpts for the exact behavior; the local model's explanation was withheld because it did not satisfy the evidence contract. [1] [2]",
+        "citations": [
+          {
+            "number": 1,
+            "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/models.py#L182-L251",
+            "label": "RequestEncodingMixin._encode_files"
+          },
+          {
+            "number": 2,
+            "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/models.py#L284-L295",
+            "label": "Request"
+          }
+        ],
+        "mode": "retrieval_fallback",
+        "fallback_reason": "The local model did not return an answer with valid source citations.",
+        "model_output": "The function `_encode_files` in `src/requests/models.py` constructs multipart upload fields from files. It processes `files` as a dictionary or list of tuples, retaining order if the data is a list of tuples. For each field, it converts the value to a list if it's a string or doesn't have an `__iter__` method, then encodes the field and value as bytes. If the value is a tuple, it extracts the filename, file object, and content type, and creates a `RequestField` object with the appropriate data. The function returns the encoded body and content type. [1]"
+      },
+      "generation_context": [
+        {
+          "kind": "code",
+          "path": "src/requests/models.py",
+          "symbol": "RequestEncodingMixin._encode_files",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/models.py#L182-L251"
+        },
+        {
+          "kind": "code",
+          "path": "src/requests/models.py",
+          "symbol": "Request",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/models.py#L284-L295"
+        }
+      ]
+    },
+    {
+      "id": "Q08",
+      "question": "Where does the HTTP adapter verify the TLS certificate and CA bundle?",
+      "type": "code",
+      "gold_in_generation_context": true,
+      "retrieval_ms": 75.8,
+      "answer_ms": 65125.0,
+      "answer": {
+        "text": "The strongest retrieved evidence is `HTTPAdapter.cert_verify`, followed by `HTTPAdapter.get_connection_with_tls_context`. Inspect both linked excerpts for the exact behavior; the local model's explanation was withheld because it did not satisfy the evidence contract. [1] [2]",
+        "citations": [
+          {
+            "number": 1,
+            "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/adapters.py#L307-L363",
+            "label": "HTTPAdapter.cert_verify"
+          },
+          {
+            "number": 2,
+            "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/adapters.py#L455-L510",
+            "label": "HTTPAdapter.get_connection_with_tls_context"
+          }
+        ],
+        "mode": "retrieval_fallback",
+        "fallback_reason": "The local model did not return an answer with valid source citations.",
+        "model_output": "The HTTP adapter verifies the TLS certificate and CA bundle in the `cert_verify` method, which is called when the URL starts with \"https\" and `verify` is set to True. It checks for a suitable CA bundle path and sets the connection's certificate requirements and paths accordingly. If the CA bundle path is invalid, it raises an `OSError`. The `get_connection_with_tls_context` method is used to create the connection with the configured TLS context, but the actual verification logic is implemented in `cert_verify` [1]. \n\nThe adapter does not verify the certificate if the `verify` parameter is False, and it does not use a CA bundle if `verify` is True but the path is not provided. If the CA bundle path is invalid, it raises an `OSError` as specified in the code [1]."
+      },
+      "generation_context": [
+        {
+          "kind": "code",
+          "path": "src/requests/adapters.py",
+          "symbol": "HTTPAdapter.cert_verify",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/adapters.py#L307-L363"
+        },
+        {
+          "kind": "code",
+          "path": "src/requests/adapters.py",
+          "symbol": "HTTPAdapter.get_connection_with_tls_context",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/adapters.py#L455-L510"
+        }
+      ]
+    },
+    {
+      "id": "Q09",
+      "question": "Which adapter method initializes the urllib3 connection pool?",
+      "type": "code",
+      "gold_in_generation_context": true,
+      "retrieval_ms": 69.2,
+      "answer_ms": 50406.0,
+      "answer": {
+        "text": "The strongest retrieved evidence is `HTTPAdapter.build_connection_pool_key_attributes`, followed by `HTTPAdapter.init_poolmanager`. Inspect both linked excerpts for the exact behavior; the local model's explanation was withheld because it did not satisfy the evidence contract. [1] [2]",
+        "citations": [
+          {
+            "number": 1,
+            "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/adapters.py#L403-L453",
+            "label": "HTTPAdapter.build_connection_pool_key_attributes"
+          },
+          {
+            "number": 2,
+            "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/adapters.py#L239-L267",
+            "label": "HTTPAdapter.init_poolmanager"
+          }
+        ],
+        "mode": "retrieval_fallback",
+        "fallback_reason": "The local model did not return an answer with valid source citations.",
+        "model_output": "The `HTTPAdapter.build_connection_pool_key_attributes` method initializes the urllib3 connection pool by determining the attributes used to select a connection from a pool, such as the SSL context and certificate requirements [1]. The `HTTPAdapter.init_poolmanager` method initializes the urllib3 PoolManager with the specified number of connections and maximum size [2]. These methods are directly responsible for setting up the connection pool behavior as per the adapter's configuration. \n\n[1] code src/requests/adapters.py:403-453  \n[2] code src/requests/adapters.py:239-267"
+      },
+      "generation_context": [
+        {
+          "kind": "code",
+          "path": "src/requests/adapters.py",
+          "symbol": "HTTPAdapter.build_connection_pool_key_attributes",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/adapters.py#L403-L453"
+        },
+        {
+          "kind": "code",
+          "path": "src/requests/adapters.py",
+          "symbol": "HTTPAdapter.init_poolmanager",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/adapters.py#L239-L267"
+        }
+      ]
+    },
+    {
+      "id": "Q10",
+      "question": "How does CaseInsensitiveDict retrieve a value regardless of header capitalization?",
+      "type": "code",
+      "gold_in_generation_context": false,
+      "retrieval_ms": 75.7,
+      "answer_ms": 44781.0,
+      "answer": {
+        "text": "The strongest retrieved evidence is `unquote_header_value`, followed by `CaseInsensitiveDict`. Inspect both linked excerpts for the exact behavior; the local model's explanation was withheld because it did not satisfy the evidence contract. [1] [2]",
+        "citations": [
+          {
+            "number": 1,
+            "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/utils.py#L475-L497",
+            "label": "unquote_header_value"
+          },
+          {
+            "number": 2,
+            "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/structures.py#L20-L31",
+            "label": "CaseInsensitiveDict"
+          }
+        ],
+        "mode": "retrieval_fallback",
+        "fallback_reason": "The local model did not return an answer with valid source citations.",
+        "model_output": "The `CaseInsensitiveDict` class in `src/requests/structures.py` provides a method to retrieve values regardless of header capitalization by using the `unquote_header_value` function [1]. This function processes the input string to remove quotes and handles special cases for filenames, but it does not alter the case of the string itself. The `CaseInsensitiveDict` class does not modify the string's case, so when retrieving a value, the original case is preserved, and the value is returned as-is. The implementation does not change the case of the string, so the retrieval behavior is consistent with the original case of the input [1]. \n\nThe function `unquote_header_value` is used to process the value, but it does not alter the case of the string, ensuring that the value is retrieved in its original case. Therefore, the `CaseInsensitiveDict` class ensures that values are retrieved regardless of header capitalization by using the `unquote_header_value` function without modifying the string's case [1]."
+      },
+      "generation_context": [
+        {
+          "kind": "code",
+          "path": "src/requests/utils.py",
+          "symbol": "unquote_header_value",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/utils.py#L475-L497"
+        },
+        {
+          "kind": "code",
+          "path": "src/requests/structures.py",
+          "symbol": "CaseInsensitiveDict",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/structures.py#L20-L31"
+        }
+      ]
+    },
+    {
+      "id": "Q11",
+      "question": "Where does Requests read credentials from a netrc file?",
+      "type": "code",
+      "gold_in_generation_context": true,
+      "retrieval_ms": 94.4,
+      "answer_ms": 50937.0,
+      "answer": {
+        "text": "The `get_netrc_auth` function in `src/requests/utils.py` reads credentials from a netrc file based on the environment variable `NETRC`. If `NETRC` is set, it uses the specified file; otherwise, it searches for netrc files in the user's home directory. The function attempts to parse the netrc file and extract authentication credentials for a given URL. If no netrc file is found, it returns `None`. The function does not modify or create any netrc files, and it does not handle cases where the netrc file is not readable or malformed. [1]",
+        "citations": [
+          {
+            "number": 1,
+            "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/utils.py#L231-L280",
+            "label": "get_netrc_auth"
+          }
+        ],
+        "mode": "generated"
+      },
+      "generation_context": [
+        {
+          "kind": "code",
+          "path": "src/requests/utils.py",
+          "symbol": "get_netrc_auth",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/utils.py#L231-L280"
+        },
+        {
+          "kind": "code",
+          "path": "tests/test_requests.py",
+          "symbol": "TestRequests.test_basicauth_with_netrc_leak",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/tests/test_requests.py#L718-L746"
+        }
+      ]
+    },
+    {
+      "id": "Q12",
+      "question": "Which function decides whether a URL should bypass configured proxies?",
+      "type": "code",
+      "gold_in_generation_context": true,
+      "retrieval_ms": 79.0,
+      "answer_ms": 58250.0,
+      "answer": {
+        "text": "The strongest retrieved evidence is `should_bypass_proxies`, followed by `test_should_bypass_proxies_no_proxy`. Inspect both linked excerpts for the exact behavior; the local model's explanation was withheld because it did not satisfy the evidence contract. [1] [2]",
+        "citations": [
+          {
+            "number": 1,
+            "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/utils.py#L810-L870",
+            "label": "should_bypass_proxies"
+          },
+          {
+            "number": 2,
+            "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/tests/test_utils.py#L825-L844",
+            "label": "test_should_bypass_proxies_no_proxy"
+          }
+        ],
+        "mode": "retrieval_fallback",
+        "fallback_reason": "The local model did not return an answer with valid source citations.",
+        "model_output": "The function `should_bypass_proxies` determines whether a URL should bypass configured proxies by checking the `no_proxy` argument. It first checks if `no_proxy` is provided, and if not, it retrieves the `no_proxy` value from the environment. The function then parses the URL and checks if the hostname matches any of the proxy hosts specified in `no_proxy`. If the hostname is an IPv4 address and matches a CIDR range in `no_proxy`, it returns `True`. If the hostname matches a proxy host in `no_proxy`, it also returns `True`. If none of these conditions are met, it returns `False`. The function does not bypass proxies unless explicitly configured or determined by the `no_proxy` argument [1]."
+      },
+      "generation_context": [
+        {
+          "kind": "code",
+          "path": "src/requests/utils.py",
+          "symbol": "should_bypass_proxies",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/utils.py#L810-L870"
+        },
+        {
+          "kind": "code",
+          "path": "tests/test_utils.py",
+          "symbol": "test_should_bypass_proxies_no_proxy",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/tests/test_utils.py#L825-L844"
+        }
+      ]
+    },
+    {
+      "id": "Q13",
+      "question": "How does digest authentication retry after an HTTP 401 challenge?",
+      "type": "code",
+      "gold_in_generation_context": true,
+      "retrieval_ms": 66.5,
+      "answer_ms": 37297.0,
+      "answer": {
+        "text": "The `handle_401` method in `HTTPDigestAuth` attempts to handle HTTP 401 challenges by incrementing a counter (`num_401_calls`) and checking if the request requires digest authentication. If the counter is less than 2, it parses the challenge header, extracts the challenge dictionary, and attempts to authenticate. If the challenge is not found or the authentication fails, the method resets the counter to 1 and returns the original response. The method does not retry beyond two attempts, as indicated by the condition `self._thread_local.num_401_calls < 2`. [1]",
+        "citations": [
+          {
+            "number": 1,
+            "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/auth.py#L273-L319",
+            "label": "HTTPDigestAuth.handle_401"
+          }
+        ],
+        "mode": "generated"
+      },
+      "generation_context": [
+        {
+          "kind": "code",
+          "path": "src/requests/auth.py",
+          "symbol": "HTTPDigestAuth.handle_401",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/auth.py#L273-L319"
+        },
+        {
+          "kind": "code",
+          "path": "src/requests/auth.py",
+          "symbol": "HTTPDigestAuth",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/auth.py#L124-L134"
+        }
+      ]
+    },
+    {
+      "id": "Q14",
+      "question": "Where does the cookie jar raise an error for duplicate cookie names?",
+      "type": "code",
+      "gold_in_generation_context": true,
+      "retrieval_ms": 73.4,
+      "answer_ms": 33578.0,
+      "answer": {
+        "text": "The strongest retrieved evidence is `TestRequests.test_cookie_duplicate_names_raises_cookie_conflict_error`, followed by `RequestsCookieJar._find_no_duplicates`. Inspect both linked excerpts for the exact behavior; the local model's explanation was withheld because it did not satisfy the evidence contract. [1] [2]",
+        "citations": [
+          {
+            "number": 1,
+            "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/tests/test_requests.py#L1424-L1433",
+            "label": "TestRequests.test_cookie_duplicate_names_raises_cookie_conflict_error"
+          },
+          {
+            "number": 2,
+            "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/cookies.py#L423-L452",
+            "label": "RequestsCookieJar._find_no_duplicates"
+          }
+        ],
+        "mode": "retrieval_fallback",
+        "fallback_reason": "The local model did not return an answer with valid source citations.",
+        "model_output": "The cookie jar raises an error for duplicate cookie names when multiple cookies with the same name, domain, and path are present. This is handled in the `_find_no_duplicates` method of `RequestsCookieJar`, which checks for duplicate cookies and raises a `CookieConflictError` if found [2]. The method iterates through all cookies and checks for matches based on the provided name, domain, and path parameters. If a duplicate is found, it raises the error with a message indicating the presence of multiple cookies with the specified name. The error is specifically raised when the `get` method is called with a name that has duplicates [1]."
+      },
+      "generation_context": [
+        {
+          "kind": "code",
+          "path": "tests/test_requests.py",
+          "symbol": "TestRequests.test_cookie_duplicate_names_raises_cookie_conflict_error",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/tests/test_requests.py#L1424-L1433"
+        },
+        {
+          "kind": "code",
+          "path": "src/requests/cookies.py",
+          "symbol": "RequestsCookieJar._find_no_duplicates",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/cookies.py#L423-L452"
+        }
+      ]
+    },
+    {
+      "id": "Q15",
+      "question": "Which function invokes registered response hooks?",
+      "type": "code",
+      "gold_in_generation_context": false,
+      "retrieval_ms": 58.6,
+      "answer_ms": 27719.0,
+      "answer": {
+        "text": "The function `dispatch_hook` in `hooks.py` is responsible for invoking registered response hooks. It takes a `key` (such as \"response\"), a `hooks` parameter, and a `hook_data` (like a `Response` object). It processes the hooks by checking if they are callable and then applies them to the `hook_data`. The `dispatch_hook` function returns the modified `hook_data` after applying the hooks. [1]",
+        "citations": [
+          {
+            "number": 1,
+            "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/hooks.py#L1-L48",
+            "label": "hooks"
+          }
+        ],
+        "mode": "generated"
+      },
+      "generation_context": [
+        {
+          "kind": "module",
+          "path": "src/requests/hooks.py",
+          "symbol": "hooks",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/hooks.py#L1-L48"
+        },
+        {
+          "kind": "code",
+          "path": "src/requests/models.py",
+          "symbol": "RequestHooksMixin.deregister_hook",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/models.py#L272-L281"
+        }
+      ]
+    },
+    {
+      "id": "Q16",
+      "question": "Where is the request method rewritten during redirects?",
+      "type": "code",
+      "gold_in_generation_context": false,
+      "retrieval_ms": 74.5,
+      "answer_ms": 43985.0,
+      "answer": {
+        "text": "The strongest retrieved evidence is `PreparedRequest.prepare_method`, followed by `Session.request`. Inspect both linked excerpts for the exact behavior; the local model's explanation was withheld because it did not satisfy the evidence contract. [1] [2]",
+        "citations": [
+          {
+            "number": 1,
+            "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/models.py#L467-L471",
+            "label": "PreparedRequest.prepare_method"
+          },
+          {
+            "number": 2,
+            "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/sessions.py#L557-L653",
+            "label": "Session.request"
+          }
+        ],
+        "mode": "retrieval_fallback",
+        "fallback_reason": "The local model did not return an answer with valid source citations.",
+        "model_output": "The request method is rewritten during redirects in the `Session.request` method, specifically in the `prepare_method` function of the `requests.models.PreparedRequest` class. This function sets the `method` attribute to the uppercase version of the provided method, ensuring that the method is consistent across the request object. The `request` method in `requests.sessions.Session` uses this `prepare_method` to handle redirects by updating the method accordingly [1]. The behavior is explicitly defined in the implementation and does not involve any additional logic or external conditions. \n\nThe method is rewritten to uppercase and stored in the `self.method` attribute, which is then used in the request. This ensures that the method is correctly applied during the redirect process. The implementation does not change the method during the redirect, but rather prepares it for use [1]. \n\nThe code does not include any additional logic for handling redirects beyond the `prepare_method` function, and no other conditions or exceptions are mentioned. The behavior is directly implemented in the provided code."
+      },
+      "generation_context": [
+        {
+          "kind": "code",
+          "path": "src/requests/models.py",
+          "symbol": "PreparedRequest.prepare_method",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/models.py#L467-L471"
+        },
+        {
+          "kind": "code",
+          "path": "src/requests/sessions.py",
+          "symbol": "Session.request",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/sessions.py#L557-L653"
+        }
+      ]
+    },
+    {
+      "id": "Q17",
+      "question": "Which method maps urllib3 connection and timeout errors into Requests exceptions?",
+      "type": "code",
+      "gold_in_generation_context": false,
+      "retrieval_ms": 70.8,
+      "answer_ms": 55578.0,
+      "answer": {
+        "text": "The strongest retrieved evidence is `exceptions`, followed by `HTTPAdapter.build_connection_pool_key_attributes`. Inspect both linked excerpts for the exact behavior; the local model's explanation was withheld because it did not satisfy the evidence contract. [1] [2]",
+        "citations": [
+          {
+            "number": 1,
+            "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/exceptions.py#L1-L60",
+            "label": "exceptions"
+          },
+          {
+            "number": 2,
+            "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/adapters.py#L403-L453",
+            "label": "HTTPAdapter.build_connection_pool_key_attributes"
+          }
+        ],
+        "mode": "retrieval_fallback",
+        "fallback_reason": "The local model did not return an answer with valid source citations.",
+        "model_output": "The method that maps urllib3 connection and timeout errors into Requests exceptions is `JSONDecodeError` [1]. This class inherits from `InvalidJSONError` and `CompatJSONDecodeError`, and it handles JSON decoding errors by raising an `IOError` with the original arguments, preserving the JSON-specific error message. The `__reduce__` method ensures that the correct arguments are used for pickling [1]. \n\nThe implementation does not directly map urllib3 connection or timeout errors into Requests exceptions, as those errors are handled elsewhere in the codebase. The provided evidence focuses on JSON decoding errors and does not include logic for handling urllib3-specific errors."
+      },
+      "generation_context": [
+        {
+          "kind": "module",
+          "path": "src/requests/exceptions.py",
+          "symbol": "exceptions",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/exceptions.py#L1-L60"
+        },
+        {
+          "kind": "code",
+          "path": "src/requests/adapters.py",
+          "symbol": "HTTPAdapter.build_connection_pool_key_attributes",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/adapters.py#L403-L453"
+        }
+      ]
+    },
+    {
+      "id": "Q18",
+      "question": "How are unsafe percent escapes requoted in a URI?",
+      "type": "code",
+      "gold_in_generation_context": true,
+      "retrieval_ms": 81.6,
+      "answer_ms": 56703.0,
+      "answer": {
+        "text": "The strongest retrieved evidence is `requote_uri`, followed by `PreparedRequest.prepare_url`. Inspect both linked excerpts for the exact behavior; the local model's explanation was withheld because it did not satisfy the evidence contract. [1] [2]",
+        "citations": [
+          {
+            "number": 1,
+            "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/utils.py#L704-L723",
+            "label": "requote_uri"
+          },
+          {
+            "number": 2,
+            "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/models.py#L483-L563",
+            "label": "PreparedRequest.prepare_url"
+          }
+        ],
+        "mode": "retrieval_fallback",
+        "fallback_reason": "The local model did not return an answer with valid source citations.",
+        "model_output": "The `requote_uri` function in `src/requests/utils.py` ensures unsafe percent escapes are requoted by attempting to unquote the URI and then quoting it with a safe set of characters. If an `InvalidURL` exception is raised during the unquote process, the function quotes the URI with a safer set of characters [1]. This mechanism ensures that any unsafe characters are properly escaped and requoted as needed. The function does not modify the URI in any other way and stops processing upon encountering an invalid URL. \n\nThe function does not handle other types of URL parsing or escaping beyond the specified scope. It does not attempt to requote characters that are already safe, as those would not be escaped in the first place. The behavior is explicitly defined in the code and does not infer from class names or other parts of the repository. \n\nThe function does not raise any exceptions beyond the `InvalidURL` exception, as specified in the code. It does not attempt to requote characters that are already safe, as those would not be escaped in the first place. The behavior is explicitly defined in the code and does not infer from class names or other parts of the repository."
+      },
+      "generation_context": [
+        {
+          "kind": "code",
+          "path": "src/requests/utils.py",
+          "symbol": "requote_uri",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/utils.py#L704-L723"
+        },
+        {
+          "kind": "code",
+          "path": "src/requests/models.py",
+          "symbol": "PreparedRequest.prepare_url",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/models.py#L483-L563"
+        }
+      ]
+    },
+    {
+      "id": "Q19",
+      "question": "What top-level function creates a Session to send an arbitrary HTTP request?",
+      "type": "code",
+      "gold_in_generation_context": false,
+      "retrieval_ms": 65.3,
+      "answer_ms": 55485.0,
+      "answer": {
+        "text": "The strongest retrieved evidence is `Session.request`, followed by `Session.post`. Inspect both linked excerpts for the exact behavior; the local model's explanation was withheld because it did not satisfy the evidence contract. [1] [2]",
+        "citations": [
+          {
+            "number": 1,
+            "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/sessions.py#L557-L653",
+            "label": "Session.request"
+          },
+          {
+            "number": 2,
+            "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/sessions.py#L695-L712",
+            "label": "Session.post"
+          }
+        ],
+        "mode": "retrieval_fallback",
+        "fallback_reason": "The local model did not return an answer with valid source citations.",
+        "model_output": "The top-level function that creates a Session to send an arbitrary HTTP request is `request` [1]. This function constructs a `Request` object, prepares it, and sends it. It accepts various parameters including `method`, `url`, `data`, `json`, and others, allowing for flexible HTTP request creation. The `post` function is a specific variant of this method for sending POST requests [2]. \n\nThe implementation directly answers the question by showing that the `request` function is the primary method for creating a session to send an HTTP request, and it is explicitly defined in the provided code."
+      },
+      "generation_context": [
+        {
+          "kind": "code",
+          "path": "src/requests/sessions.py",
+          "symbol": "Session.request",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/sessions.py#L557-L653"
+        },
+        {
+          "kind": "code",
+          "path": "src/requests/sessions.py",
+          "symbol": "Session.post",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/sessions.py#L695-L712"
+        }
+      ]
+    },
+    {
+      "id": "Q20",
+      "question": "Where is a streaming request body detected and prepared?",
+      "type": "code",
+      "gold_in_generation_context": true,
+      "retrieval_ms": 61.1,
+      "answer_ms": 49032.0,
+      "answer": {
+        "text": "The strongest retrieved evidence is `PreparedRequest.prepare_body`, followed by `PreparedRequest.prepare_content_length`. Inspect both linked excerpts for the exact behavior; the local model's explanation was withheld because it did not satisfy the evidence contract. [1] [2]",
+        "citations": [
+          {
+            "number": 1,
+            "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/models.py#L576-L652",
+            "label": "PreparedRequest.prepare_body"
+          },
+          {
+            "number": 2,
+            "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/models.py#L654-L668",
+            "label": "PreparedRequest.prepare_content_length"
+          }
+        ],
+        "mode": "retrieval_fallback",
+        "fallback_reason": "The local model did not return an answer with valid source citations.",
+        "model_output": "The streaming request body is detected and prepared in the `prepare_body` method of `requests/models.py`, specifically in the section where `body` is assigned and `content_type` is determined. If `data` is iterable and not a string, list, tuple, or mapping, it is directly assigned to `body`. The `prepare_content_length` method then sets the `Content-Length` header based on the length of the `body`. If `body` is not None, its length is calculated, and the header is set accordingly. If the body is not iterable or is a string, the method proceeds to encode the data and set the content type. [1] [2]"
+      },
+      "generation_context": [
+        {
+          "kind": "code",
+          "path": "src/requests/models.py",
+          "symbol": "PreparedRequest.prepare_body",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/models.py#L576-L652"
+        },
+        {
+          "kind": "code",
+          "path": "src/requests/models.py",
+          "symbol": "PreparedRequest.prepare_content_length",
+          "url": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/models.py#L654-L668"
+        }
+      ]
+    },
+    {
+      "id": "Q21",
+      "question": "Which PR fixed multipart file detection for wrappers that expose methods through __getattr__?",
+      "type": "history",
+      "gold_in_generation_context": true,
+      "retrieval_ms": 66.3,
+      "answer_ms": 29406.0,
+      "answer": {
+        "text": "The strongest retrieved evidence is `Fix `prepare_body` stream detection for `__getattr__`-based file wrappers`, followed by `Fix `_encode_files` detection for `__getattr__`-based file wrappers`. Inspect both linked excerpts for the exact behavior; the local model's explanation was withheld because it did not satisfy the evidence contract. [1] [2]",
+        "citations": [
+          {
+            "number": 1,
+            "url": "https://github.com/psf/requests/pull/7433",
+            "label": "Fix `prepare_body` stream detection for `__getattr__`-based file wrappers"
+          },
+          {
+            "number": 2,
+            "url": "https://github.com/psf/requests/pull/7502",
+            "label": "Fix `_encode_files` detection for `__getattr__`-based file wrappers"
+          }
+        ],
+        "mode": "retrieval_fallback",
+        "fallback_reason": "The local model did not return an answer with valid source citations.",
+        "model_output": "The PR that fixed multipart file detection for wrappers exposing methods through `__getattr__` is PR#7433 [1]. It adds a fallback stream detector by checking `hasattr(data, \"__iter__\")` to handle file-like objects that proxy their interface through `__getattr__`. This change restores the 2.33.1 behavior without altering the modernization of `isinstance(Iterable)`. The implementation directly addresses the issue by explicitly checking for the presence of the `__iter__` method in the data object. \n\nThe change is implemented in the code snippet provided in [1], where the condition `isinstance(data, Iterable) or hasattr(data, \"__iter__\")` is added to detect file-like objects."
+      },
+      "generation_context": [
+        {
+          "kind": "pr",
+          "path": "PR#7433",
+          "symbol": "Fix `prepare_body` stream detection for `__getattr__`-based file wrappers",
+          "url": "https://github.com/psf/requests/pull/7433"
+        },
+        {
+          "kind": "pr",
+          "path": "PR#7502",
+          "symbol": "Fix `_encode_files` detection for `__getattr__`-based file wrappers",
+          "url": "https://github.com/psf/requests/pull/7502"
+        }
+      ]
+    },
+    {
+      "id": "Q22",
+      "question": "Why was a hasattr __iter__ fallback added to streaming request body detection?",
+      "type": "history",
+      "gold_in_generation_context": true,
+      "retrieval_ms": 65.3,
+      "answer_ms": 29859.0,
+      "answer": {
+        "text": "The `hasattr(data, \"__iter__\")` fallback was added to the `prepare_body` stream detection to handle file-like objects that use `__getattr__` to proxy their interface. This ensures that objects like file wrappers, which may not directly implement `__iter__`, are still recognized as stream-like objects. The fallback checks for `__iter__` via `hasattr` and excludes standard types like `str`, `bytes`, `list`, and `tuple` to avoid false positives. This change restores the behavior seen in version 2.33.1 without reverting the modernization of `isinstance(Iterable)` for standard iterables [1].",
+        "citations": [
+          {
+            "number": 1,
+            "url": "https://github.com/psf/requests/pull/7433",
+            "label": "Fix `prepare_body` stream detection for `__getattr__`-based file wrappers"
+          }
+        ],
+        "mode": "generated"
+      },
+      "generation_context": [
+        {
+          "kind": "pr",
+          "path": "PR#7433",
+          "symbol": "Fix `prepare_body` stream detection for `__getattr__`-based file wrappers",
+          "url": "https://github.com/psf/requests/pull/7433"
+        },
+        {
+          "kind": "commit",
+          "path": "",
+          "symbol": "Fix `prepare_body` stream detection for `__getattr__`-based file wrappers (#7433)",
+          "url": "https://github.com/psf/requests/commit/6404f345e562d962abe6700a1c357ec1e7e18232"
+        }
+      ]
+    },
+    {
+      "id": "Q23",
+      "question": "Why was no_proxy behavior changed to respect domain boundaries?",
+      "type": "history",
+      "gold_in_generation_context": true,
+      "retrieval_ms": 81.2,
+      "answer_ms": 21313.0,
+      "answer": {
+        "text": "The change to respect domain boundaries in `no_proxy` behavior was driven by the need to align with ecosystem expectations and resolve a long-standing issue [1]. The original implementation had undefined behavior, which was later fixed in both CPython and Curl. The PR porting the fix to Requests ensures that `no_proxy` now respects domain boundaries, preventing unintended behavior in proxy configurations. [1]",
+        "citations": [
+          {
+            "number": 1,
+            "url": "https://github.com/psf/requests/pull/7427",
+            "label": "Port bpo-39057 to Requests"
+          }
+        ],
+        "mode": "generated"
+      },
+      "generation_context": [
+        {
+          "kind": "pr",
+          "path": "PR#7427",
+          "symbol": "Port bpo-39057 to Requests",
+          "url": "https://github.com/psf/requests/pull/7427"
+        },
+        {
+          "kind": "pr",
+          "path": "PR#7505",
+          "symbol": "Add hasattr checks for remaining protocol isinstance checks",
+          "url": "https://github.com/psf/requests/pull/7505"
+        }
+      ]
+    },
+    {
+      "id": "Q24",
+      "question": "Why did the Requests maintainers add a generative AI contribution policy?",
+      "type": "history",
+      "gold_in_generation_context": true,
+      "retrieval_ms": 68.7,
+      "answer_ms": 27453.0,
+      "answer": {
+        "text": "The strongest retrieved evidence is `Add AI Policy`, followed by `Add AI Policy`. Inspect both linked excerpts for the exact behavior; the local model's explanation was withheld because it did not satisfy the evidence contract. [1] [2]",
+        "citations": [
+          {
+            "number": 1,
+            "url": "https://github.com/psf/requests/pull/7490",
+            "label": "Add AI Policy"
+          },
+          {
+            "number": 2,
+            "url": "https://github.com/psf/requests/commit/c4367f231b5dc54f23f2983828562ce3a7555a8a",
+            "label": "Add AI Policy"
+          }
+        ],
+        "mode": "retrieval_fallback",
+        "fallback_reason": "The local model did not return an answer with valid source citations.",
+        "model_output": "The Requests maintainers added a generative AI contribution policy to address the issue of low-quality pull requests, many of which are duplicated and spammy, thereby reducing unnecessary work for the community [1]. The policy aims to establish clear expectations for contributions, ensuring that contributors aim for meaningful and high-quality work rather than using AI to spam or reputation farm. The policy is reflected in the commit message, which explicitly states the problem and the goal of the policy [2]. The implementation focuses on clarifying behavior and stopping spammy contributions. \n\n[1] pr PR#7490 Add AI Policy  \n[2] commit  Add AI Policy"
+      },
+      "generation_context": [
+        {
+          "kind": "pr",
+          "path": "PR#7490",
+          "symbol": "Add AI Policy",
+          "url": "https://github.com/psf/requests/pull/7490"
+        },
+        {
+          "kind": "commit",
+          "path": "",
+          "symbol": "Add AI Policy",
+          "url": "https://github.com/psf/requests/commit/c4367f231b5dc54f23f2983828562ce3a7555a8a"
+        }
+      ]
+    },
+    {
+      "id": "Q25",
+      "question": "Why were mutable header input types reconsidered in Requests 2.34?",
+      "type": "history",
+      "gold_in_generation_context": true,
+      "retrieval_ms": 74.2,
+      "answer_ms": 32015.0,
+      "answer": {
+        "text": "The mutable header input types were reconsidered in Requests 2.34 due to issues with typing compatibility and codebase friction. The PR #7431 addressed mutability issues, but the decision to move `Request.headers` back to `Mapping` instead of `MutableMapping` was made to ensure compatibility with type hints [2]. This change required all users to type their input as `dict[str, str | bytes]`, which is more invasive than the previous mutable approach. The decision reflects a trade-off between supporting `update()` calls and maintaining type hinting consistency. [1]",
+        "citations": [
+          {
+            "number": 1,
+            "url": "https://github.com/psf/requests/pull/7431",
+            "label": "Fix mutability issues with headers input types"
+          },
+          {
+            "number": 2,
+            "url": "https://github.com/psf/requests/pull/7441",
+            "label": "Move Request.headers back to Mapping"
+          }
+        ],
+        "mode": "generated"
+      },
+      "generation_context": [
+        {
+          "kind": "pr",
+          "path": "PR#7431",
+          "symbol": "Fix mutability issues with headers input types",
+          "url": "https://github.com/psf/requests/pull/7431"
+        },
+        {
+          "kind": "pr",
+          "path": "PR#7441",
+          "symbol": "Move Request.headers back to Mapping",
+          "url": "https://github.com/psf/requests/pull/7441"
+        }
+      ]
+    }
+  ]
+}

@@ -6,9 +6,9 @@ import json
 import subprocess
 from pathlib import Path
 
-from .answer import LocalGenerator, select_answer_evidence
+from .answer import LocalGenerator, retrieval_answer, select_answer_evidence
 from .core import Index, collect_files, collect_history, collect_prs
-from .evaluate import evaluate
+from .evaluate import evaluate, evaluate_answers
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -55,9 +55,16 @@ def main() -> None:
     ask.add_argument("question")
     ask.add_argument("--k", type=int, default=5)
     ask.add_argument("--json", action="store_true")
+    ask.add_argument("--generate", action="store_true",
+                     help="opt in to the slower local-model explanation")
     bench = sub.add_parser("eval", help="Run the fixed retrieval evaluation")
     bench.add_argument("--questions", type=Path, default=ROOT / "eval" / "questions.json")
     bench.add_argument("--output", type=Path, default=ROOT / "eval" / "report.json")
+    answer_bench = sub.add_parser(
+        "eval-answers", help="Run the local answer pipeline over the fixed questions")
+    answer_bench.add_argument("--questions", type=Path, default=ROOT / "eval" / "questions.json")
+    answer_bench.add_argument("--output", type=Path, default=ROOT / "eval" / "answer_report.json")
+    answer_bench.add_argument("--limit", type=int)
     args = parser.parse_args()
     if args.command == "fetch-prs":
         print(f"Cached {fetch_prs(args.repo, DEFAULT_PRS, args.limit)} PRs at {DEFAULT_PRS}")
@@ -73,14 +80,17 @@ def main() -> None:
         elif args.command == "ask":
             result = index.search(args.question, args.k)
             result["results"] = select_answer_evidence(result["results"])
-            async def generate():
-                generator = LocalGenerator()
-                try:
-                    await generator.start()
-                    return await generator.answer(args.question, result["results"])
-                finally:
-                    await generator.close()
-            result["answer"] = asyncio.run(generate())
+            if args.generate:
+                async def generate():
+                    generator = LocalGenerator()
+                    try:
+                        await generator.start()
+                        return await generator.answer(args.question, result["results"])
+                    finally:
+                        await generator.close()
+                result["answer"] = asyncio.run(generate())
+            else:
+                result["answer"] = retrieval_answer(result["results"])
             if args.json:
                 print(json.dumps(result, indent=2))
             else:
@@ -92,6 +102,11 @@ def main() -> None:
                     print(f"\n[{i}] {row['kind']} {row['path']} {row['symbol']}\n{row['url']}\n{row['text'][:500]}")
         elif args.command == "eval":
             report = evaluate(index, args.questions)
+            args.output.parent.mkdir(parents=True, exist_ok=True)
+            args.output.write_text(json.dumps(report, indent=2), encoding="utf-8")
+            print(json.dumps(report["summary"], indent=2))
+        elif args.command == "eval-answers":
+            report = asyncio.run(evaluate_answers(index, args.questions, args.limit))
             args.output.parent.mkdir(parents=True, exist_ok=True)
             args.output.write_text(json.dumps(report, indent=2), encoding="utf-8")
             print(json.dumps(report["summary"], indent=2))
