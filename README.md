@@ -1,8 +1,47 @@
-# GitContext — public repository evidence demo
+# GitContext — evidence-first answers for public code
 
 [![CI](https://github.com/adity982/GitContext/actions/workflows/ci.yml/badge.svg)](https://github.com/adity982/GitContext/actions/workflows/ci.yml)
 
-GitContext is a first-milestone prototype for exploring why code behaves as it does. It indexes a **pinned public revision** of `psf/requests`, recent commits, and a cached set of merged PR descriptions and conversation comments. It retrieves source evidence with dense vectors and SQLite FTS5 BM25, fuses both rankings, and applies a transparent code-aware reranker. A local Qwen model generates an answer from that evidence, with links to the original file, commit, or PR.
+GitContext is a local RAG prototype for answering _why does this code behave this way?_ without hiding the evidence. It indexes a **pinned public revision** of `psf/requests`, recent commits, and merged PR discussions; combines dense retrieval with SQLite FTS5 BM25; reranks the results; and returns immutable GitHub links to the strongest source excerpts.
+
+Retrieval-only evidence is the default. A local Qwen model is available as an explicit experiment, but GitContext withholds generated prose that breaks its citation and answer-shape contract.
+
+## See it work
+
+This output was reproduced against the pinned corpus on November 5, 2026:
+
+```text
+> python -m gitcontext.cli ask "Where does Requests strip redirect authorization?"
+
+Indexed psf/requests at 3c7baaa05ab4aa49cc819ce3a819d260de19c157
+Answer: The strongest retrieved evidence is
+`SessionRedirectMixin.should_strip_auth`, followed by
+`SessionRedirectMixin.rebuild_auth`. Inspect both linked excerpts for the exact
+behavior. No model explanation was requested. [1] [2]
+
+[1] sessions.py#L154-L184 — SessionRedirectMixin.should_strip_auth
+[2] sessions.py#L309-L332 — SessionRedirectMixin.rebuild_auth
+```
+
+The actual response includes the two immutable GitHub URLs and the matching source excerpts. On this run, retrieval took **122.1 ms**; model startup was not required.
+
+```mermaid
+flowchart LR
+    Q[Question] --> H[Dense + BM25 retrieval]
+    H --> R[Code-aware reranker]
+    R --> E[Exact source links]
+    R -->|explicit opt-in| M[Local Qwen explanation]
+    M --> V{Evidence contract}
+    V -->|passes| A[Cited answer]
+    V -->|fails| E
+```
+
+### What is already measurable
+
+- **21/25 Recall@5** on a fixed source-location benchmark
+- **9/25 generated answers** passed the structural evidence contract; the other 16 safely fell back
+- **No API key** and no hosted model required
+- **Pinned corpus revision** and immutable file, commit, and PR links in every result
 
 This milestone runs entirely on the local machine after downloading the model. It does not support private repositories, permission filtering, automatic updates, incident connectors, or production serving. Generated answers receive only retrieved evidence and their citation numbers are checked, but the small local model can still make unsupported interpretations. Answer correctness has not been independently graded; inspect the linked source before relying on an explanation.
 
