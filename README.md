@@ -8,6 +8,10 @@ Retrieval-only evidence is the default. A local Qwen model is available as an ex
 
 ## See it work
 
+![GitContext returning a retrieval-only answer with two immutable Requests source citations](docs/assets/gitcontext-evidence-demo.jpg)
+
+The browser demo shows the safe default: GitContext names the strongest matching symbols, links both pinned source excerpts, and does not start the local model unless generation is explicitly selected.
+
 This output was reproduced against the pinned corpus on November 5, 2026:
 
 ```text
